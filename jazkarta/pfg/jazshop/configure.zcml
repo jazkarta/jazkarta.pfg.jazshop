@@ -1,0 +1,59 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="jazkarta.pfg.jazshop">
+    
+  <five:registerPackage package="." initialize=".initialize" />
+
+  <!-- Register the installation GenericSetup extension profile -->
+  <genericsetup:registerProfile
+      name="default"
+      title="jazkarta.pfg.jazshop"
+      directory="profiles/default"
+      description="Simple Jazkarta Shop integration for PloneFormGen"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+  
+    <class class=".fields.JazShopSelectStringField">
+        <require
+            permission="zope2.View"
+            interface=".interfaces.IJazShopSelectStringField"
+            />
+    </class>
+
+    <class class=".fields.JazShopMultiSelectStringField">
+        <require
+            permission="zope2.View"
+            interface=".interfaces.IJazShopMultiSelectStringField"
+            />
+    </class>
+
+    <class class=".adapter.JazShopCheckoutAdapter">
+        <require
+            permission="zope2.View"
+            interface=".interfaces.IJazShopCheckoutAdapter"
+            />
+    </class>
+
+    <browser:page
+        name="jazshop-pfg-callback"
+        for="*"
+        class=".browser.JazShopPFGCallback"
+        permission="zope2.View"
+        />
+
+    <utility
+        name="jazkarta.pfg.jazshop.available_products"
+        component=".fields.get_available_products_vocab"
+        />
+
+    <subscriber
+        for=".interfaces.IJazShopCheckoutAdapter Products.Archetypes.interfaces.IObjectInitializedEvent"
+        handler=".adapter.add_checkout_redirect_after_creation"
+        />
+
+
+</configure>

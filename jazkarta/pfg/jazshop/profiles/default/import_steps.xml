@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<import-steps>
+ <import-step id="PFGJazShop" version="20081128-01"
+              handler="jazkarta.pfg.jazshop.setuphandlers.importVarious"
+              title="Jazkarta Shop - PFG integration">
+  <dependency step="typeinfo"/>
+  Import PFG Jazkarta Shop settings
+ </import-step>
+</import-steps>
