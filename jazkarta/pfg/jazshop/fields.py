@@ -3,8 +3,10 @@ from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
+from AccessControl import ClassSecurityInfo
 from Products.ATContentTypes.content import schemata
 from Products.Archetypes import atapi
+from Products.CMFCore.permissions import View
 from Products.PloneFormGen.content.fieldsBase import BaseFormField, BaseFieldSchemaStringDefault
 from jazkarta.shop.interfaces import IProduct
 from .interfaces import IJazShopSelectStringField, IJazShopMultiSelectStringField
@@ -57,6 +59,8 @@ class JazShopSelectStringField(BaseFormField):
 
     implements(IJazShopSelectStringField)
 
+    security  = ClassSecurityInfo()
+
     meta_type = "JazShopSelectStringField"
     schema = JazShopSelectFieldSchema
 
@@ -69,6 +73,7 @@ class JazShopSelectStringField(BaseFormField):
             widget=atapi.SelectionWidget(),
             vocabulary='_get_selection_vocabulary',
             enforceVocabulary=True,
+            write_permission=View,
             )
 
     def setAvailableProducts(self, value, **kw):
@@ -92,6 +97,8 @@ class JazShopMultiSelectStringField(BaseFormField):
 
     implements(IJazShopMultiSelectStringField)
 
+    security  = ClassSecurityInfo()
+
     meta_type = "JazShopMultiSelectStringField"
     schema = JazShopMultiSelectFieldSchema
 
@@ -104,6 +111,7 @@ class JazShopMultiSelectStringField(BaseFormField):
             widget=atapi.MultiSelectionWidget(),
             vocabulary='_get_selection_vocabulary',
             enforceVocabulary=True,
+            write_permission=View,
             )
 
     def setAvailableProducts(self, value, **kw):
