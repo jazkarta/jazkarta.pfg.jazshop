@@ -2,6 +2,7 @@ from zope.browserpage import ViewPageTemplateFile
 from Products.Five import BrowserView
 from jazkarta.shop.api import get_order_from_id
 from jazkarta.shop.utils import resolve_uid
+from jazkarta.shop.cart import Cart
 
 
 class JazShopPFGCallback(BrowserView):
@@ -21,4 +22,12 @@ class JazShopPFGCallback(BrowserView):
                 thanks_page = None
             if thanks_page:
                 self.request.response.redirect(thanks_page.absolute_url())
+
+        user_id = self.request.form.get('user_id', None)
+        browser_id = self.request.form.get('browser_id', None)
+        if user_id != None or browser_id != None:
+            # recreate the cart so that the default thank you template can
+            # access it
+            self.cart = Cart.from_request(self.request,
+                user_id=user_id, browser_id=browser_id)
         return self.index()
