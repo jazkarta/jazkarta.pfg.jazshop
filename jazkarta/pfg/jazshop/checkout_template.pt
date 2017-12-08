@@ -1,0 +1,67 @@
+<div id="cartFormWrapper"
+     tal:define="cart view/old_cart|view/cart;
+                 can_edit view/cart_is_editable|python:False;
+                 can_refund view/show_refund_column|nothing">
+
+<table class="listing cart-listing">
+  <tr>
+    <th>Purchases</th>
+    <th style="width: 90px;">Price</th>
+    <th style="width: 90px;">Quantity</th>
+    <th style="width: 90px;">Amount</th>
+    <th style="width: 90px;" tal:condition="can_edit">Remove</th>
+    <th style="width: 90px;" tal:condition="can_refund">Refund Amount</th>
+  </tr>
+  <tal:items repeat="item cart/items">
+    <tr class="item">
+      <td>
+        <div>
+          <a tal:attributes="href item/href|nothing"
+             tal:content="item/name"
+             tal:omit-tag="not:item/href|nothing">Item</a>
+        </div>
+      </td>
+      <td tal:define="is_discounted item/is_discounted">
+          <span class="original-item-price"
+                tal:condition="is_discounted"
+                tal:content="python:'${:,.2f}'.format(item.orig_price)">Original Price</span>
+          <span tal:attributes="class python:is_discounted and 'discounted-item-price' or 'item-price'"
+                tal:content="python:'${:,.2f}'.format(item.price)">Price</span>
+      </td>
+      <td tal:condition="python:not can_edit">
+        <span tal:replace="item/quantity">Quantity</span>
+      </td>
+      <td tal:condition="can_edit">
+        <a href="javascript:;" class="jaz-shop-decr"
+           tal:condition="can_edit"
+           tal:attributes="rel item/cart_id">-</a>
+        <input type="text" class="jaz-shop-quantity"
+               tal:attributes="value item/quantity;
+                               rel item/cart_id" />
+        <a href="javascript:;" class="jaz-shop-incr"
+           tal:condition="can_edit"
+           tal:attributes="rel item/cart_id">+</a>
+        <div class="error"
+             tal:define="uid item/uid; cart_id item/cart_id; warning view/cart_warnings/?cart_id|view/cart_warnings/?uid|nothing"
+             tal:condition="warning" tal:content="warning"></div>
+      </td>
+      <td tal:define="is_discounted item/is_discounted|nothing">
+          <span class="original-item-price"
+                tal:condition="is_discounted"
+                tal:content="python:'${:,.2f}'.format(item.orig_subtotal)">Original Subtotal</span>
+          <span tal:attributes="class python:is_discounted and 'discounted-item-price' or 'item-price'"
+                tal:content="python:'${:,.2f}'.format(item.subtotal)">Price</span>
+      </td>
+      <td tal:condition="can_edit">
+        <a href="javascript:;" class="jaz-shop-remove" tal:attributes="rel item/cart_id">&#9447;</a>
+      </td>
+      <td tal:condition="can_refund">
+        $<input type="text" size="4"
+                tal:attributes="name string:item_${item/cart_id}"
+                value="${python:request.form.get('item_' + item.cart_id, '{:.2f}'.format(item.subtotal))}" />
+      </td>
+    </tr>
+  </tal:items>
+</table>
+<br />
+</div>
