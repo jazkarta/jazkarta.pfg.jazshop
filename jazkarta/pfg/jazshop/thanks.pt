@@ -56,6 +56,24 @@
           </tal:items>
         </table>
 
+          <tal:shipping condition="python:view.ship_charge != 0">
+            <tr>
+              <td tal:content="string:Shipping - ${view/ship_method}"></td>
+              <td></td>
+              <td></td>
+              <td tal:content="python:'${:,.2f}'.format(view.ship_charge)" />
+            </tr>
+          </tal:shipping>
+          <tal:tax tal:repeat="tax_item view/taxes">
+            <tr>
+              <td tal:content="string:${tax_item/label}"></td>
+              <td></td>
+              <td></td>
+              <td tal:content="python:'${:,.2f}'.format(tax_item['tax'])">TAX</td>
+            </tr>
+          </tal:tax>
+
+        <br />
         <div class="subtotal">
           <p><strong>Your purchases total</strong>
           <span tal:content="python:'${:,.2f}'.format(view.amount)"></span>
