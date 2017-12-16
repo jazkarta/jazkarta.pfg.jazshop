@@ -1,3 +1,4 @@
+from decimal import Decimal
 from zope.browserpage import ViewPageTemplateFile
 from Products.Five import BrowserView
 from jazkarta.shop.api import get_order_from_id
@@ -8,7 +9,6 @@ from jazkarta.shop.cart import Cart
 class JazShopPFGCallback(BrowserView):
     """ Redirect to form's thank-you page, if available. """
     index = ViewPageTemplateFile('thanks.pt')
-    cart_template = ViewPageTemplateFile('checkout_cart.pt')
 
     def __call__(self):
         order_id = self.request.form.get('order_id')
@@ -24,17 +24,28 @@ class JazShopPFGCallback(BrowserView):
             if thanks_page:
                 self.request.response.redirect(thanks_page.absolute_url())
 
-        user_id = self.request.form.get('user_id', None)
-        browser_id = self.request.form.get('browser_id', None)
         error = self.request.form.get('error', None)
         self.error = None
+        mail_not_sent = self.request.form.get('mail_not_sent', None)
+        self.mail_not_sent = None
         if error != None:
-            error.replace("_", " ")
+            error.replace("_", " ") # decode error message
             self.error = error
-        if user_id != None or browser_id != None:
-            # recreate the cart so that the default thank you template can
-            # access it
-            self.cart = None
-            self.cart = Cart.from_request(self.request,
-                user_id=user_id, browser_id=browser_id)
+        if mail_not_sent != None:
+            mail_not_sent.replace("_", " ") # decode error message
+            self.mail_not_sent = mail_not_sent
+
+        # get cart data from stored order
+        data = get_order_from_id(order_id)
+        self.cart_items = data['items'].items()
+        self.cart_data = []
+        self.amount = 0
+        for order_item in self.cart_items:
+            href = resolve_uid(order_item[1]['uid']).absolute_url()
+            self.cart_data.append({'href': href,
+                                   'quantity': order_item[1]['quantity'],
+                                   'price': order_item[1]['price'],
+                                   'name': order_item[1]['name']})
+            self.amount += order_item[1]['quantity']*order_item[1]['price']
+
         return self.index()
