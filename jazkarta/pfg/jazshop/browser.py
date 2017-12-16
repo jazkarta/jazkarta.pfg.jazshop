@@ -49,7 +49,8 @@ class JazShopPFGCallback(BrowserView):
             self.amount += order_item[1]['quantity']*order_item[1]['price']
 
         self.amount += data['ship_charge']
-        self.amount += data['taxes']['tax']
+        for tax_entry in data['taxes']:
+            self.amount += tax_entry['tax']
 
         self.taxes = data['taxes']
         self.ship_method = data['ship_method']
