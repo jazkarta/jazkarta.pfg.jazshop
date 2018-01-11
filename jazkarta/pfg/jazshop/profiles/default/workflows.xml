@@ -3,6 +3,7 @@
  <bindings>
   <type type_id="JazShopSelectStringField"/>
   <type type_id="JazShopMultiSelectStringField"/>
+  <type type_id="JazShopArbitraryPriceStringField"/>
   <type type_id="JazShopCheckoutAdapter"/>
  </bindings>
 </object>

@@ -10,6 +10,7 @@ from Products.CMFCore.permissions import View
 from Products.PloneFormGen.content.fieldsBase import BaseFormField, BaseFieldSchemaStringDefault
 from jazkarta.shop.interfaces import IProduct
 from .interfaces import IJazShopSelectStringField, IJazShopMultiSelectStringField
+from .interfaces import IJazShopArbitraryPriceStringField
 from .config import PROJECTNAME
 
 
@@ -119,5 +120,37 @@ class JazShopMultiSelectStringField(BaseFormField):
         self.fgField.vocabulary = get_selected_products(self, value)
 
 
+JazShopArbitraryPriceFieldSchema = BaseFieldSchemaStringDefault.copy() + atapi.Schema((
+    atapi.StringField('availableProducts',
+        searchable=False,
+        required=True,
+        widget=atapi.MultiSelectionWidget(),
+        vocabulary_factory='jazkarta.pfg.jazshop.available_products',
+    ),
+))
+
+schemata.finalizeATCTSchema(JazShopArbitraryPriceFieldSchema, moveDiscussion=False)
+
+
+class JazShopArbitraryPriceStringField(BaseFormField):
+
+    implements(IJazShopArbitraryPriceStringField)
+
+    security  = ClassSecurityInfo()
+
+    meta_type = "JazShopArbitraryPriceStringField"
+    schema = JazShopArbitraryPriceFieldSchema
+
+    def __init__(self, oid, **kwargs):
+        BaseFormField.__init__(self, oid, **kwargs)
+
+        self.fgField = atapi.StringField('fg_product_price_field',
+            searchable=False,
+            required=False,
+            write_permission=View,
+            )
+
+
 atapi.registerType(JazShopSelectStringField, PROJECTNAME)
 atapi.registerType(JazShopMultiSelectStringField, PROJECTNAME)
+atapi.registerType(JazShopArbitraryPriceStringField, PROJECTNAME)

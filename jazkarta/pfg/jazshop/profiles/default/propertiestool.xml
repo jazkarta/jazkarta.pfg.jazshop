@@ -4,6 +4,7 @@
   <property name="metaTypesNotToList" type="lines" purge="False">
    <element value="JazShopSelectStringField"/>
    <element value="JazShopMultiSelectStringField"/>
+   <element value="JazShopArbitraryPriceStringField"/>
    <element value="JazShopCheckoutAdapter"/>
   </property>
  </object>
@@ -11,6 +12,7 @@
   <property name="types_not_searched" type="lines" purge="False">
    <element value="JazShopSelectStringField"/>
    <element value="JazShopMultiSelectStringField"/>
+   <element value="JazShopArbitraryPriceStringField"/>
    <element value="JazShopCheckoutAdapter"/>
   </property>
  </object>
