@@ -1,3 +1,4 @@
+from decimal import Decimal
 from zope.interface import implementer
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -28,10 +29,21 @@ class JazShopCheckoutAdapter(FormActionAdapter):
         for field in fields:
             if field.portal_type in JAZSHOP_FIELDS:
                 value = REQUEST.form.get(field.id)
+                if not value:
+                    continue
                 if isinstance(value, list):
                     products.extend(value)
                 else:
                     products.append(value)
+            if field.portal_type == 'JazShopArbitraryPriceStringField':
+                price = REQUEST.form.get(field.id)
+                if not price or not field.availableProducts:
+                    continue
+                product_uid = field.availableProducts[0]
+                cart.add_product(product_uid)
+                for item in cart._items.values():
+                    if item['uid'] == product_uid:
+                        item['price'] = Decimal(price)
         for uid in products:
             cart.add_product(uid)
         # store reference to this form

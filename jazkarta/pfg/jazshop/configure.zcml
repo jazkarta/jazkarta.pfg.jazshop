@@ -17,6 +17,17 @@
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
   
+
+  <genericsetup:upgradeDepends
+      source="1000"
+      destination="1001"
+      sortkey="1"
+      profile="jazkarta.pfg.jazshop:default"
+      title="Add Arbitrary Price Field"
+      description=""
+      import_steps="typeinfo"
+      />
+
     <class class=".fields.JazShopSelectStringField">
         <require
             permission="zope2.View"
@@ -28,6 +39,13 @@
         <require
             permission="zope2.View"
             interface=".interfaces.IJazShopMultiSelectStringField"
+            />
+    </class>
+
+    <class class=".fields.JazShopArbitraryPriceStringField">
+        <require
+            permission="zope2.View"
+            interface=".interfaces.IJazShopArbitraryPriceStringField"
             />
     </class>
 

@@ -12,6 +12,8 @@
     meta_type="Factory-based Type Information with dynamic views" />
   <object name="JazShopSelectStringField"
     meta_type="Factory-based Type Information with dynamic views" />
+  <object name="JazShopArbitraryPriceStringField"
+    meta_type="Factory-based Type Information with dynamic views" />
   <object name="JazShopCheckoutAdapter"
     meta_type="Factory-based Type Information with dynamic views" />
 </object>

@@ -11,6 +11,7 @@
   <factorytypes>
     <type portal_type="JazShopSelectStringField" />
     <type portal_type="JazShopMultiSelectStringField" />
+    <type portal_type="JazShopArbitraryPriceStringField" />
     <type portal_type="JazShopCheckoutAdapter" />
   </factorytypes>
 </object>

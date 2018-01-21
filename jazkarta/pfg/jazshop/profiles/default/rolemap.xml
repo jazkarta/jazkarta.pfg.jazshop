@@ -10,5 +10,9 @@
       <role name="Manager" />
       <role name="Contributor" />
     </permission>
+    <permission name="jazkarta.pfg.jazshop: Add JazShopArbitraryPriceStringField" acquire="False">
+      <role name="Manager" />
+      <role name="Contributor" />
+    </permission>
   </permissions>
 </rolemap>

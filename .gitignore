@@ -1,3 +1,6 @@
+*.pyc
+*egg-info
+.ropeproject
 .installed.cfg
 .mr.developer.cfg
 bin
