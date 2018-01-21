@@ -54,8 +54,8 @@
               </td>
             </tr>
           </tal:items>
-          <tal:shipping_method condition="view/ship_method">
-              <tal:shipping condition="python:view.ship_charge != 0">
+          <tal:shipping_method tal:condition="view/ship_method">
+              <tal:shipping tal:condition="python:view.ship_charge != 0">
                 <tr>
                   <td tal:content="string:Shipping - ${view/ship_method}"></td>
                   <td></td>
