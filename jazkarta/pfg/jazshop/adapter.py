@@ -1,3 +1,4 @@
+from decimal import Decimal
 from zope.interface import implementer
 from Products.Archetypes import atapi
 from Products.ATContentTypes.content.schemata import finalizeATCTSchema
@@ -42,7 +43,7 @@ class JazShopCheckoutAdapter(FormActionAdapter):
                 cart.add_product(product_uid)
                 for item in cart._items.values():
                     if item['uid'] == product_uid:
-                        item['price'] = price
+                        item['price'] = Decimal(price)
         for uid in products:
             cart.add_product(uid)
         # store reference to this form
