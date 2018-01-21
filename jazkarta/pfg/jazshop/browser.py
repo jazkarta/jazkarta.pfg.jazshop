@@ -40,6 +40,9 @@ class JazShopPFGCallback(BrowserView):
         self.cart_items = data['items'].items()
         self.cart_data = []
         self.amount = 0
+        self.ship_method = None
+        self.ship_charge = 0
+        self.taxes = []
         for order_item in self.cart_items:
             href = resolve_uid(order_item[1]['uid']).absolute_url()
             self.cart_data.append({'href': href,
@@ -48,12 +51,16 @@ class JazShopPFGCallback(BrowserView):
                                    'name': order_item[1]['name']})
             self.amount += order_item[1]['quantity']*order_item[1]['price']
 
-        self.amount += data['ship_charge']
-        for tax_entry in data['taxes']:
-            self.amount += tax_entry['tax']
+        if hasattr(data, 'ship_charge'):
+            self.amount += data['ship_charge']
+            self.ship_charge = data['ship_charge']
 
-        self.taxes = data['taxes']
-        self.ship_method = data['ship_method']
-        self.ship_charge = data['ship_charge']
+        if hasattr(data, 'taxes'):
+            for tax_entry in data['taxes']:
+                self.amount += tax_entry['tax']
+            self.taxes = data['taxes']
+
+        if hasattr(data, 'ship_method'):
+            self.ship_method = data['ship_method']
 
         return self.index()

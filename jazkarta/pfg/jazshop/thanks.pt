@@ -54,14 +54,16 @@
               </td>
             </tr>
           </tal:items>
-          <tal:shipping condition="python:view.ship_charge != 0">
-            <tr>
-              <td tal:content="string:Shipping - ${view/ship_method}"></td>
-              <td></td>
-              <td></td>
-              <td tal:content="python:'${:,.2f}'.format(view.ship_charge)" />
-            </tr>
-          </tal:shipping>
+          <tal:shipping_method condition="view/ship_method">
+              <tal:shipping condition="python:view.ship_charge != 0">
+                <tr>
+                  <td tal:content="string:Shipping - ${view/ship_method}"></td>
+                  <td></td>
+                  <td></td>
+                  <td tal:content="python:'${:,.2f}'.format(view.ship_charge)" />
+                </tr>
+              </tal:shipping>
+          </tal:shipping_method>
           <tal:tax tal:repeat="tax_item view/taxes">
             <tr>
               <td tal:content="string:${tax_item/label}"></td>
