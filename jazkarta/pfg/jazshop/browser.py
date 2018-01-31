@@ -12,18 +12,6 @@ class JazShopPFGCallback(BrowserView):
 
     def __call__(self):
         order_id = self.request.form.get('order_id')
-        if order_id is not None:
-            data = get_order_from_id(order_id)
-            form_uid = data.get('pfg_form_uid')
-            form = resolve_uid(form_uid)
-        if order_id and form:
-            try:
-                thanks_page = form.restrictedTraverse('thank-you')
-            except AttributeError:
-                thanks_page = None
-            if thanks_page:
-                self.request.response.redirect(thanks_page.absolute_url())
-
         error = self.request.form.get('error', None)
         self.error = None
         mail_not_sent = self.request.form.get('mail_not_sent', None)
