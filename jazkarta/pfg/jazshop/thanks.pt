@@ -11,6 +11,9 @@
   <h1 class="documentFirstHeading">Thank You</h1>
 </metal:title>
 
+<metal:title fill-slot="content-description">
+</metal:title>
+
 <metal:core fill-slot="content-core">
     <!-- P5 errors might not display correctly, P4 support only -->
     <div class="jaz-shop-message error" tal:condition="view/mail_not_sent">
@@ -38,9 +41,7 @@
             <tr class="item">
               <td>
                 <div>
-                    <a tal:attributes="href item/href|nothing"
-                     tal:content="item/name"
-                     tal:omit-tag="not:item/href|nothing">Item</a>
+                  <span tal:content="item/name">Item</span>
                 </div>
               </td>
               <td>
