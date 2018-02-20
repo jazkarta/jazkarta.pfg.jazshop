@@ -53,6 +53,7 @@ def get_selected_products(context, value):
     for product in value:
         if product in product_dict:
             selected.append((product, product_dict[product]))
+    selected = sorted(selected, key=lambda(x):float(x[1].split()[0][1:]))
     return selected
 
 
