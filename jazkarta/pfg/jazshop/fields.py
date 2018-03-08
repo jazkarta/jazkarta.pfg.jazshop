@@ -49,10 +49,10 @@ def get_selected_products(context, value):
         object_provides=IProduct.__identifier__,
         sort_on='sortable_title',
         sort_order='ascending')
-    product_dict = {product.UID: "$" + str(product.getObject().price) + ' - ' + product.Title for product in products}
+    product_dict = {product.UID: ("{}|{}".format(product.Title, product.UID), "$" + str(product.getObject().price) + ' - ' + product.Title) for product in products}
     for product in value:
         if product in product_dict:
-            selected.append((product, product_dict[product]))
+            selected.append(product_dict[product])
     selected = sorted(selected, key=lambda(x):float(x[1].split()[0][1:]))
     return selected
 

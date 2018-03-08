@@ -32,15 +32,17 @@ class JazShopCheckoutAdapter(FormActionAdapter):
                 if not value:
                     continue
                 if isinstance(value, list):
+                    value = map(lambda x: x.split('|')[-1], value)
                     products.extend(value)
                 else:
+                    value = value.split('|')[-1]
                     products.append(value)
             if field.portal_type == 'JazShopArbitraryPriceStringField':
                 price = REQUEST.form.get(field.id)
                 if not price or not field.availableProducts:
                     continue
                 product_uid = field.availableProducts[0]
-                cart.add_product(product_uid)
+                cart.add_product(product_uid.split('|')[-1])
                 for item in cart._items.values():
                     if item['uid'] == product_uid:
                         item['price'] = Decimal(price)
