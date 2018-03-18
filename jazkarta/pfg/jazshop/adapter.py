@@ -14,7 +14,17 @@ from .interfaces import IJazShopCheckoutAdapter
 JAZSHOP_FIELDS = ['JazShopSelectStringField',
                   'JazShopMultiSelectStringField']
 
-JazShopCheckoutAdapterSchema = FormAdapterSchema.copy()
+JazShopCheckoutAdapterSchema = FormAdapterSchema.copy() + atapi.Schema((
+    atapi.StringField('formIdExpression',
+        required=False,
+        default='',
+        description="""Expression containing one or more field names to be
+                       prepended to order data on Jazkarta Shop orders page.
+                       Field names must be enclosed in brackets.
+                       Example: {last_name}, {first_name}: """,
+    ),
+))
+
 finalizeATCTSchema(JazShopCheckoutAdapterSchema)
 
 
@@ -51,6 +61,12 @@ class JazShopCheckoutAdapter(FormActionAdapter):
             cart.add_product(uid)
         # store reference to this form
         cart.data['pfg_form_uid'] = self.aq_parent.UID()
+        if getattr(self, 'formIdExpression', None):
+            try:
+                prepend = self.formIdExpression.format(**REQUEST.form)
+                cart.data['name'] = prepend + cart.data['name']
+            except (KeyError, ValueError):
+                pass
         cart.save()
 
 
