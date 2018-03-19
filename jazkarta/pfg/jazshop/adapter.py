@@ -34,6 +34,12 @@ class JazShopCheckoutAdapter(FormActionAdapter):
     schema = JazShopCheckoutAdapterSchema
 
     def onSuccess(self, fields, REQUEST=None):
+        item_prepend = None
+        if getattr(self, 'formIdExpression', None):
+            try:
+                item_prepend = self.formIdExpression.format(**REQUEST.form)
+            except (KeyError, ValueError):
+                pass
         cart = Cart.from_request(REQUEST)
         products = []
         for field in fields:
@@ -59,14 +65,12 @@ class JazShopCheckoutAdapter(FormActionAdapter):
                         item['price'] = Decimal(price)
         for uid in products:
             cart.add_product(uid)
+        if item_prepend is not None:
+            for item in cart._items.values():
+                if not item['name'].startswith(item_prepend):
+                    item['name'] = item_prepend + item['name']
         # store reference to this form
         cart.data['pfg_form_uid'] = self.aq_parent.UID()
-        if getattr(self, 'formIdExpression', None):
-            try:
-                prepend = self.formIdExpression.format(**REQUEST.form)
-                cart.data['name'] = prepend + cart.data['name']
-            except (KeyError, ValueError):
-                pass
         cart.save()
 
 
