@@ -67,7 +67,7 @@ class JazShopCheckoutAdapter(FormActionAdapter):
             cart.add_product(uid)
         if item_prepend is not None:
             for item in cart._items.values():
-                if not item['name'].startswith(item_prepend):
+                if item['uid'] in products and not item['name'].startswith(item_prepend):
                     item['name'] = item_prepend + item['name']
         # store reference to this form
         cart.data['pfg_form_uid'] = self.aq_parent.UID()
