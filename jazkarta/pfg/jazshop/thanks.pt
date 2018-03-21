@@ -17,8 +17,7 @@
 <metal:core fill-slot="content-core">
     <!-- P5 errors might not display correctly, P4 support only -->
     <div class="jaz-shop-message error" tal:condition="view/mail_not_sent">
-      <strong>There was a problem with your order</strong>
-      <p tal:content="view/mail_not_sent">Error</p>
+      <p tal:content="string:NOTE: ${view/mail_not_sent}">Error</p>
     </div>
 
     <tal:no-error tal:condition="not:view/error">

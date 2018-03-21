@@ -20,7 +20,7 @@ JazShopSelectFieldSchema = BaseFieldSchemaStringDefault.copy() + atapi.Schema((
         required=False,
         widget=atapi.MultiSelectionWidget(),
         vocabulary_factory='jazkarta.pfg.jazshop.available_products',
-        enforceVocabulary=True,
+        enforceVocabulary=False,
     ),
 ))
 
@@ -74,7 +74,7 @@ class JazShopSelectStringField(BaseFormField):
             required=False,
             widget=atapi.SelectionWidget(),
             vocabulary='_get_selection_vocabulary',
-            enforceVocabulary=True,
+            enforceVocabulary=False,
             write_permission=View,
             )
 
@@ -112,7 +112,7 @@ class JazShopMultiSelectStringField(BaseFormField):
             required=False,
             widget=atapi.MultiSelectionWidget(),
             vocabulary='_get_selection_vocabulary',
-            enforceVocabulary=True,
+            enforceVocabulary=False,
             write_permission=View,
             )
 
