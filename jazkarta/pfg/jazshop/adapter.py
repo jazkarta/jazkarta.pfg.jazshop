@@ -58,7 +58,7 @@ class JazShopCheckoutAdapter(FormActionAdapter):
                 if not price or not field.availableProducts:
                     continue
                 product_uid = field.availableProducts[0]
-                cart.add_product(product_uid.split('|')[-1])
+                products.append(product_uid.split('|')[-1])
                 for item in cart._items.values():
                     if item['uid'] == product_uid:
                         price = price.replace('$', '')
