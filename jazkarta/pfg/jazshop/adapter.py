@@ -42,6 +42,7 @@ class JazShopCheckoutAdapter(FormActionAdapter):
                 pass
         cart = Cart.from_request(REQUEST)
         products = []
+        arbitrary = []
         for field in fields:
             if field.portal_type in JAZSHOP_FIELDS:
                 value = REQUEST.form.get(field.id)
@@ -57,8 +58,10 @@ class JazShopCheckoutAdapter(FormActionAdapter):
                 price = REQUEST.form.get(field.id)
                 if not price or not field.availableProducts:
                     continue
-                product_uid = field.availableProducts[0]
-                products.append(product_uid.split('|')[-1])
+                product_value = field.availableProducts[0]
+                product_uid = product_value.split('|')[-1]
+                cart.add_product(product_uid)
+                arbitrary.append(product_uid)
                 for item in cart._items.values():
                     if item['uid'] == product_uid:
                         price = price.replace('$', '')
@@ -67,7 +70,8 @@ class JazShopCheckoutAdapter(FormActionAdapter):
             cart.add_product(uid)
         if item_prepend is not None:
             for item in cart._items.values():
-                if item['uid'] in products and not item['name'].startswith(item_prepend):
+                if (item['uid'] in (products + arbitrary) and
+                        not item['name'].startswith(item_prepend)):
                     item['name'] = item_prepend + item['name']
         # store reference to this form
         cart.data['pfg_form_uid'] = self.aq_parent.UID()
