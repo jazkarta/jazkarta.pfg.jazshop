@@ -82,6 +82,10 @@ class JazShopSelectStringField(BaseFormField):
         """ set vocabulary """
         self.fgField.vocabulary = get_selected_products(self, value)
 
+    def htmlValue(self, REQUEST):
+        """ return product title instead of uid """
+        value = REQUEST.form.get(self.__name__, 'No Input')
+        return value.split('|')[0]
 
 JazShopMultiSelectFieldSchema = BaseFieldSchemaStringDefault.copy() + atapi.Schema((
     atapi.StringField('availableProducts',
@@ -119,6 +123,14 @@ class JazShopMultiSelectStringField(BaseFormField):
     def setAvailableProducts(self, value, **kw):
         """ set vocabulary """
         self.fgField.vocabulary = get_selected_products(self, value)
+
+    def htmlValue(self, REQUEST):
+        """ return product title instead of uid """
+        value = REQUEST.form.get(self.__name__, 'No Input')
+        if type(value) != type([]):
+            value = [value]
+        value = ', '.join([v.split('|')[0] for v in value])
+        return value
 
 
 JazShopArbitraryPriceFieldSchema = BaseFieldSchemaStringDefault.copy() + atapi.Schema((

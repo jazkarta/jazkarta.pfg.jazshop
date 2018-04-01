@@ -73,8 +73,24 @@ class JazShopCheckoutAdapter(FormActionAdapter):
                 if (item['uid'] in (products + arbitrary) and
                         not item['name'].startswith(item_prepend)):
                     item['name'] = item_prepend + item['name']
-        # store reference to this form
-        cart.data['pfg_form_uid'] = self.aq_parent.UID()
+        # store form fields and reference to this form
+        if 'order_details' not in cart.data:
+            cart.data['order_details'] = ''
+        details = '<p></p><h3>{}</h3><dl>'.format(self.aq_parent.title)
+        form_fields = {}
+        fields = self.aq_parent._getFieldObjects()
+        for field in fields:
+            if field.id in REQUEST.form:
+                form_fields[field.id] = REQUEST.form.get(field.id)
+                label = field.fgField.widget.label
+                value = field.htmlValue(REQUEST)
+                details += '<dt>{}</dt><dd>{}</dd>'.format(label, value)
+        details += '</dl><p></p>'
+        cart.data['order_details'] += details
+        if 'pfg_forms' not in cart.data:
+            cart.data['pfg_forms'] = {}
+        pfg_form_uid = self.aq_parent.UID()
+        cart.data['pfg_forms'][pfg_form_uid] = form_fields
         cart.save()
 
 
