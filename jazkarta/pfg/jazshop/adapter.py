@@ -76,7 +76,7 @@ class JazShopCheckoutAdapter(FormActionAdapter):
         # store form fields and reference to this form
         if 'order_details' not in cart.data:
             cart.data['order_details'] = ''
-        details = '<p></p><h3>{}</h3><dl>'.format(self.aq_parent.title)
+        details = '<p></p><h2>{}</h2><dl>'.format(self.aq_parent.title)
         form_fields = {}
         fields = self.aq_parent._getFieldObjects()
         for field in fields:
