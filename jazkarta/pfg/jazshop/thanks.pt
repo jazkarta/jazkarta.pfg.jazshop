@@ -85,8 +85,8 @@
       </tal:b>
     </tal:no-error>
     <div class="jaz-shop-message error" tal:condition="view/error">
-      <strong>There was a problem with your order</strong>
       <p tal:content="view/error">Error</p>
+      <p><a href="@@checkout"><button>Back to Checkout</button></a></p>
     </div>
 
 </metal:core>
