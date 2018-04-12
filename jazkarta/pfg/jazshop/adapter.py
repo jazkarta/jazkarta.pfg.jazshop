@@ -80,11 +80,10 @@ class JazShopCheckoutAdapter(FormActionAdapter):
         form_fields = {}
         fields = self.aq_parent._getFieldObjects()
         for field in fields:
-            if field.id in REQUEST.form:
-                form_fields[field.id] = REQUEST.form.get(field.id)
-                label = field.fgField.widget.label
-                value = field.htmlValue(REQUEST)
-                details += '<dt>{}</dt><dd>{}</dd>'.format(label, value)
+            label = field.fgField.widget.label
+            value = field.htmlValue(REQUEST)
+            form_fields[field.id] = value
+            details += '<dt>{}</dt><dd>{}</dd>'.format(label, value)
         details += '</dl><p></p>'
         cart.data['order_details'] += details
         if 'pfg_forms' not in cart.data:
