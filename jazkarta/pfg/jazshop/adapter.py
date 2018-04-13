@@ -67,7 +67,8 @@ class JazShopCheckoutAdapter(FormActionAdapter):
                         price = price.replace('$', '')
                         item['price'] = Decimal(price)
         for uid in products:
-            cart.add_product(uid)
+            if uid != '0':
+                cart.add_product(uid)
         if item_prepend is not None:
             for item in cart._items.values():
                 if (item['uid'] in (products + arbitrary) and
