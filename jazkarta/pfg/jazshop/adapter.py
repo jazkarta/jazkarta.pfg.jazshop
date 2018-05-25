@@ -33,6 +33,18 @@ class JazShopCheckoutAdapter(FormActionAdapter):
     meta_type = 'JazShopCheckoutAdapter'
     schema = JazShopCheckoutAdapterSchema
 
+    def _get_item_details(self, pfg_form, REQUEST):
+        details = '<p></p><h2>{}</h2><dl>'.format(pfg_form.title)
+        form_fields = {}
+        fields = pfg_form._getFieldObjects()
+        for field in fields:
+            label = field.fgField.widget.label
+            value = field.htmlValue(REQUEST)
+            form_fields[field.id] = value
+            details += '<dt>{}</dt><dd>{}</dd>'.format(label, value)
+        details += '</dl><p></p>'
+        return form_fields, details
+
     def onSuccess(self, fields, REQUEST=None):
         item_prepend = None
         if getattr(self, 'formIdExpression', None):
@@ -42,7 +54,14 @@ class JazShopCheckoutAdapter(FormActionAdapter):
                 pass
         cart = Cart.from_request(REQUEST)
         products = []
+        pfg_products = []
         arbitrary = []
+        if 'pfg_products' not in cart.data:
+            cart.data['pfg_products'] = {}
+        if 'pfg_details' not in cart.data:
+            cart.data['pfg_details'] = {}
+        if 'pfg_forms' not in cart.data:
+            cart.data['pfg_forms'] = {}
         for field in fields:
             if field.portal_type in JAZSHOP_FIELDS:
                 value = REQUEST.form.get(field.id)
@@ -69,28 +88,30 @@ class JazShopCheckoutAdapter(FormActionAdapter):
         for uid in products:
             if uid != '0':
                 cart.add_product(uid)
+                pfg_products.append(uid)
         if item_prepend is not None:
             for item in cart._items.values():
                 if (item['uid'] in (products + arbitrary) and
                         not item['name'].startswith(item_prepend)):
                     item['name'] = item_prepend + item['name']
         # store form fields and reference to this form
-        if 'order_details' not in cart.data:
-            cart.data['order_details'] = ''
-        details = '<p></p><h2>{}</h2><dl>'.format(self.aq_parent.title)
-        form_fields = {}
-        fields = self.aq_parent._getFieldObjects()
-        for field in fields:
-            label = field.fgField.widget.label
-            value = field.htmlValue(REQUEST)
-            form_fields[field.id] = value
-            details += '<dt>{}</dt><dd>{}</dd>'.format(label, value)
-        details += '</dl><p></p>'
-        cart.data['order_details'] += details
-        if 'pfg_forms' not in cart.data:
-            cart.data['pfg_forms'] = {}
+        pfg_form = self.aq_parent
         pfg_form_uid = self.aq_parent.UID()
-        cart.data['pfg_forms'][pfg_form_uid] = form_fields
+        cart.data['pfg_products'][pfg_form_uid] = pfg_products
+        fields, details = self._get_item_details(pfg_form, REQUEST)
+        cart.data['pfg_forms'][pfg_form_uid] = fields
+        cart.data['pfg_details'][pfg_form_uid] = details
+        order_details = ''
+        cart_products = [i.uid for i in cart.items]
+        for form_uid in cart.data['pfg_forms'].keys():
+            form_products = cart.data['pfg_products'][pfg_form_uid]
+            in_cart = True
+            for p in form_products:
+                if p not in cart_products:
+                    in_cart = False
+            if in_cart:
+                order_details += cart.data['pfg_details'][pfg_form_uid]
+        cart.data['order_details'] = order_details
         cart.save()
 
 
