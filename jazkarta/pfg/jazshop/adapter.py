@@ -104,13 +104,13 @@ class JazShopCheckoutAdapter(FormActionAdapter):
         order_details = ''
         cart_products = [i.uid for i in cart.items]
         for form_uid in cart.data['pfg_forms'].keys():
-            form_products = cart.data['pfg_products'][pfg_form_uid]
+            form_products = cart.data['pfg_products'][form_uid]
             in_cart = True
             for p in form_products:
                 if p not in cart_products:
                     in_cart = False
             if in_cart:
-                order_details += cart.data['pfg_details'][pfg_form_uid]
+                order_details += cart.data['pfg_details'][form_uid]
         cart.data['order_details'] = order_details
         cart.save()
 
