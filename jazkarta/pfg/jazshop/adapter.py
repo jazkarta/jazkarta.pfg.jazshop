@@ -115,6 +115,9 @@ class JazShopCheckoutAdapter(FormActionAdapter):
         cart.save()
 
 
+atapi.registerType(JazShopCheckoutAdapter, PROJECTNAME)
+
+
 def add_checkout_redirect_after_creation(adapter, event):
     redirect_to = 'redirect_to:string:${portal_url}/checkout'
     success_override = adapter.aq_parent.getThanksPageOverride()
@@ -129,4 +132,18 @@ def add_checkout_redirect_after_creation(adapter, event):
     else:
         adapter.aq_parent.setThanksPageOverride(redirect_to)
 
-atapi.registerType(JazShopCheckoutAdapter, PROJECTNAME)
+
+def handle_item_removed(event):
+    cart = event.object
+    order_details = ''
+    cart_products = [i.uid for i in cart.items]
+    for form_uid in cart.data['pfg_forms'].keys():
+        form_products = cart.data['pfg_products'][form_uid]
+        in_cart = True
+        for p in form_products:
+            if p not in cart_products:
+                in_cart = False
+        if in_cart:
+            order_details += cart.data['pfg_details'][form_uid]
+    cart.data['order_details'] = order_details
+    cart.save()

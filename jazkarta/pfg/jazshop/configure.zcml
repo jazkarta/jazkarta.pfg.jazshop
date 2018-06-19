@@ -73,5 +73,10 @@
         handler=".adapter.add_checkout_redirect_after_creation"
         />
 
+    <subscriber
+        for="jazkarta.shop.interfaces.ItemRemoved"
+        handler=".adapter.handle_item_removed"
+        />
+
 
 </configure>
