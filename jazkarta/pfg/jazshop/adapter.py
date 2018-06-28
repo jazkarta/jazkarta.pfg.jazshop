@@ -135,6 +135,9 @@ def add_checkout_redirect_after_creation(adapter, event):
 
 def handle_item_removed(event):
     cart = event.object
+    # bail out if no pfg_forms involved
+    if not 'pfg_forms' in cart.data:
+        return
     order_details = ''
     cart_products = [i.uid for i in cart.items]
     for form_uid in cart.data['pfg_forms'].keys():
