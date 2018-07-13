@@ -1,0 +1,69 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+
+<metal:main fill-slot="content-core">
+  <div>
+    <h1 class="documentFirstHeading">Export Orders - <tal:title replace="context/aq_parent/Title|context/Title|nothing" /></h1>
+
+    <form id="export-form-orders" name="export-form-orders" method="post"
+          tal:condition="view/orders_exist"
+          tal:attributes="action string:${context/absolute_url}/${view/__name__}">
+        <div>
+            <tal:bad_dates tal:condition="not:view/check_date_integrity">
+                <h2>Selected date range incorrect, displaying all orders.</h2>
+            </tal:bad_dates>
+             <table id="shop-order-date-selection-table">
+                 <tbody>
+                    <tr>
+                        <th><h5>Start Date</h5></th>
+                        <th><h5>End Date</h5></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                         <td class="order-date-picker-box">
+                            <tal:define define="show_hm python:False;
+                                                show_ymd python:True;
+                                                starting_year python:2016;
+                                                ending_year python:None;
+                                                future_years python:0;
+                                                formname string:ShopOrders;
+                                                inputvalue python:view.startDate().strftime(u'%Y-%m-%d');
+                                                inputname string:Start-Date">
+                            <metal:box use-macro="context/@@jazkarta.shop.calendar_macros/macros/JazkartaShopCalendarDatePickerBox">
+                            </metal:box>
+                            </tal:define>
+                        </td>
+                        <td class="order-date-picker-box">
+                            <tal:define define="show_hm python:False;
+                                                show_ymd python:True;
+                                                starting_year python:2016;
+                                                ending_year python:None;
+                                                future_years python:0;
+                                                formname string:ShopOrders;
+                                                inputvalue python:view.endDate().strftime(u'%Y-%m-%d');
+                                                inputname string:End-Date">
+                            <metal:box use-macro="context/@@jazkarta.shop.calendar_macros/macros/JazkartaShopCalendarDatePickerBox">
+                            </metal:box>
+                            </tal:define>
+                        </td>
+
+                    </tr>
+                 </tbody>
+             </table>
+        </div>
+        <div>&nbsp;</div>
+        <button id="export_csv_button" type="submit" name="export_csv">Export CSV</button>
+    </form>
+    <div class="NoResults" tal:condition="not:view/orders_exist">No orders found for this form.</div>
+  </div>
+</metal:main>
+</body>
+</html>

@@ -33,4 +33,8 @@
           url_expr="string:${object_url}/edit" visible="True">
     <permission value="Modify portal content"/>
   </action>
+  <action title="Orders" action_id="orders" category="object" condition_expr=""
+          url_expr="string:${object_url}/@@jazshop-pfg-orders" visible="True">
+    <permission value="jazkarta.shop: Manage shop"/>
+  </action>
 </object>
