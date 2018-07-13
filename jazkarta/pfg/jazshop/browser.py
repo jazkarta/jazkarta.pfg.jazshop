@@ -111,8 +111,13 @@ class JazShopPFGOrders(BrowserView, DateMixin):
         if orders and len(orders) > 0:
             writer = csv.DictWriter(
                 orders_csv,
-                fieldnames=(['date', 'ship_to', 'total'] +
-                            list(field_map.keys())),
+                fieldnames=(
+                    ['date', 'ship_to', 'ship_method',
+                     'bill_first_name', 'bill_last_name',
+                     'bill_street', 'bill_city', 'bill_state',
+                     'bill_postal_code', 'bill_country', 'bill_phone',
+                     'bill_email', 'items'] +
+                    list(field_map.keys())),
                 restval='',
                 extrasaction='ignore',
                 dialect='excel',
@@ -120,29 +125,39 @@ class JazShopPFGOrders(BrowserView, DateMixin):
             )
             # Column titles
             ldict = {
-                'date': "Date",
-                'ship_first_name': 'Shipping First Name',
-                'ship_last_name': 'Shipping Last Name',
-                'ship_street': 'Shipping Street',
-                'ship_city': 'Shipping City',
-                'ship_state': 'Shipping State',
-                'ship_postal_code': 'Shipping Postal Code',
-                'ship_country': 'Shipping Country',
+                'date': 'Date',
+                'ship_to': 'Shipping Address',
+                'ship_method': 'Shipping Method',
+                'bill_first_name': 'Billing First Name',
+                'bill_last_name': 'Billing Last Name',
+                'bill_street': 'Billing Street',
+                'bill_city': 'Billing City',
+                'bill_state': 'Billing State',
+                'bill_postal_code': 'Billing Postal Code',
+                'bill_country': 'Billing Country',
+                'bill_phone': 'Billing Phone',
+                'bill_email': 'Billing Email',
+                'items': 'Items Purchased',
             }
             ldict.update(field_map)
             writer.writerow(ldict)
 
             for order in orders:
-                address = order.get('address', {})
+                bill = order.get('bill_to', {})
                 ldict = {
                     'date': order['date'],
-                    'ship_first_name': address.get('first_name'),
-                    'ship_last_name': address.get('last_name'),
-                    'ship_street': address.get('street'),
-                    'ship_city': address.get('city'),
-                    'ship_state': address.get('state'),
-                    'ship_postal_code': address.get('postal_code'),
-                    'ship_country': address.get('country'),
+                    'ship_to': order.get('ship_to'),
+                    'ship_method': order.get('ship_method'),
+                    'bill_first_name': bill.get('first_name'),
+                    'bill_last_name': bill.get('last_name'),
+                    'bill_street': bill.get('address'),
+                    'bill_city': bill.get('city'),
+                    'bill_state': bill.get('state'),
+                    'bill_postal_code': bill.get('zip'),
+                    'bill_country': bill.get('country'),
+                    'bill_phone': bill.get('phone'),
+                    'bill_email': bill.get('email'),
+                    'items': order.get('items'),
                 }
                 ldict.update(order['pfg_forms'][form_uid])
                 writer.writerow(ldict)
