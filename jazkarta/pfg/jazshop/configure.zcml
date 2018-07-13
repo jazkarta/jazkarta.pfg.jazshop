@@ -28,6 +28,16 @@
       import_steps="typeinfo"
       />
 
+  <genericsetup:upgradeDepends
+      source="1001"
+      destination="1002"
+      sortkey="1"
+      profile="jazkarta.pfg.jazshop:default"
+      title="Add Order Export View"
+      description=""
+      import_steps="typeinfo"
+      />
+
     <class class=".fields.JazShopSelectStringField">
         <require
             permission="zope2.View"
@@ -61,6 +71,13 @@
         for="*"
         class=".browser.JazShopPFGCallback"
         permission="zope2.View"
+        />
+
+    <browser:page
+        name="jazshop-pfg-orders"
+        for=".adapter.JazShopCheckoutAdapter"
+        class=".browser.JazShopPFGOrders"
+        permission="jazkarta.shop.ManageShop"
         />
 
     <utility
