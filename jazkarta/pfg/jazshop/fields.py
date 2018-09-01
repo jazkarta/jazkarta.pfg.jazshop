@@ -80,6 +80,16 @@ class JazShopSelectStringField(BaseFormField):
             write_permission=View,
             )
 
+    def getAvailableProducts(self):
+        result = []
+        vocabulary = self.fgField.vocabulary
+        for key, value in vocabulary:
+            result.append(key.split('|')[-1])
+        return result
+
+    def getRawAvailableProducts(self):
+        return self.getAvailableProducts()
+
     def setAvailableProducts(self, value, **kw):
         """ set vocabulary """
         self.fgField.vocabulary = get_selected_products(self, value)
@@ -90,11 +100,12 @@ class JazShopSelectStringField(BaseFormField):
         return value.split('|')[0]
 
 JazShopMultiSelectFieldSchema = BaseFieldSchemaStringDefault.copy() + atapi.Schema((
-    atapi.StringField('availableProducts',
+    atapi.LinesField('availableProducts',
         searchable=False,
         required=True,
         widget=atapi.MultiSelectionWidget(),
         vocabulary_factory='jazkarta.pfg.jazshop.available_products',
+        multiValued=True,
     ),
 ))
 
@@ -122,6 +133,16 @@ class JazShopMultiSelectStringField(BaseFormField):
             write_permission=View,
             )
 
+    def getAvailableProducts(self):
+        result = []
+        vocabulary = self.fgField.vocabulary
+        for key, value in vocabulary:
+            result.append(key.split('|')[-1])
+        return result
+
+    def getRawAvailableProducts(self):
+        return self.getAvailableProducts()
+
     def setAvailableProducts(self, value, **kw):
         """ set vocabulary """
         self.fgField.vocabulary = get_selected_products(self, value)
@@ -136,11 +157,12 @@ class JazShopMultiSelectStringField(BaseFormField):
 
 
 JazShopArbitraryPriceFieldSchema = BaseFieldSchemaStringDefault.copy() + atapi.Schema((
-    atapi.StringField('availableProducts',
+    atapi.LinesField('availableProducts',
         searchable=False,
         required=True,
         widget=atapi.MultiSelectionWidget(),
         vocabulary_factory='jazkarta.pfg.jazshop.available_products',
+        multiValued=True,
     ),
 ))
 
