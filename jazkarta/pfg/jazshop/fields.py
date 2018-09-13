@@ -22,6 +22,12 @@ JazShopSelectFieldSchema = BaseFieldSchemaStringDefault.copy() + atapi.Schema((
         vocabulary_factory='jazkarta.pfg.jazshop.available_products',
         enforceVocabulary=False,
     ),
+    atapi.StringField('selectionFormat',
+        vocabulary=('select', 'radio'),
+        enforceVocabulary=True,
+        widget=atapi.SelectionWidget(format='radio'),
+        required=True,
+    ),
 ))
 
 schemata.finalizeATCTSchema(JazShopSelectFieldSchema, moveDiscussion=False)
@@ -80,6 +86,11 @@ class JazShopSelectStringField(BaseFormField):
             write_permission=View,
             )
 
+    def at_post_edit_script(self):
+        super(JazShopSelectStringField, self).at_post_edit_script()
+        selection_format = self.getField('selectionFormat').get(self)
+        self.fgField.widget.format = selection_format
+
     def getAvailableProducts(self):
         result = []
         vocabulary = self.fgField.vocabulary
@@ -107,6 +118,12 @@ JazShopMultiSelectFieldSchema = BaseFieldSchemaStringDefault.copy() + atapi.Sche
         vocabulary_factory='jazkarta.pfg.jazshop.available_products',
         multiValued=True,
     ),
+    atapi.StringField('selectionFormat',
+        vocabulary=('select', 'checkbox'),
+        enforceVocabulary=True,
+        widget=atapi.SelectionWidget(format='radio'),
+        required=True,
+    ),
 ))
 
 schemata.finalizeATCTSchema(JazShopMultiSelectFieldSchema, moveDiscussion=False)
@@ -132,6 +149,11 @@ class JazShopMultiSelectStringField(BaseFormField):
             enforceVocabulary=False,
             write_permission=View,
             )
+
+    def at_post_edit_script(self):
+        super(JazShopMultiSelectStringField, self).at_post_edit_script()
+        selection_format = self.getField('selectionFormat').get(self)
+        self.fgField.widget.format = selection_format
 
     def getAvailableProducts(self):
         result = []
