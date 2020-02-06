@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <rolemap>
+  <roles>
+    <role name="PFG Orders Access"/>
+  </roles>
   <permissions>
     <!-- -*- extra stuff goes here -*- -->
     <permission name="jazkarta.pfg.jazshop: Add JazShopMultiSelectStringField" acquire="False">

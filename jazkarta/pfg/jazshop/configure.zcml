@@ -4,6 +4,7 @@
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
     i18n_domain="jazkarta.pfg.jazshop">
     
   <five:registerPackage package="." initialize=".initialize" />
@@ -37,6 +38,23 @@
       description=""
       import_steps="typeinfo"
       />
+
+  <genericsetup:upgradeDepends
+      source="1002"
+      destination="1003"
+      sortkey="1"
+      profile="jazkarta.pfg.jazshop:default"
+      title="Add PFG Orders Access role"
+      description=""
+      import_steps="rolemap"
+      />
+
+    <permission
+        id="jazkarta.pfg.jazshop.AccessPfgOrders"
+        title="jazkarta.pfg.jazshop: Access Pfg Orders">
+      <role name="Site Administrator" />
+      <role name="Manager" />
+    </permission>
 
     <class class=".fields.JazShopSelectStringField">
         <require
@@ -77,7 +95,7 @@
         name="jazshop-pfg-orders"
         for=".adapter.JazShopCheckoutAdapter"
         class=".browser.JazShopPFGOrders"
-        permission="jazkarta.shop.ManageShop"
+        permission="jazkarta.pfg.jazshop.AccessPfgOrders"
         />
 
     <utility
