@@ -54,6 +54,7 @@
         title="jazkarta.pfg.jazshop: Access Pfg Orders">
       <role name="Site Administrator" />
       <role name="Manager" />
+      <role name="PFG Orders Accessor" />
     </permission>
 
     <class class=".fields.JazShopSelectStringField">
