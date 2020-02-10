@@ -38,6 +38,16 @@
       import_steps="typeinfo"
       />
 
+  <genericsetup:upgradeDepends
+      source="1002"
+      destination="1003"
+      sortkey="1"
+      profile="jazkarta.pfg.jazshop:default"
+      title="Add PFG Orders Access role"
+      description=""
+      import_steps="rolemap"
+      />
+
     <class class=".fields.JazShopSelectStringField">
         <require
             permission="zope2.View"
@@ -73,11 +83,15 @@
         permission="zope2.View"
         />
 
+    <permission title="jazkarta.pfg.jazshop: Access Pfg Orders"
+                id="jazkarta.pfg.jazshop.AccessPfgOrders">
+    </permission>
+
     <browser:page
         name="jazshop-pfg-orders"
         for=".adapter.JazShopCheckoutAdapter"
         class=".browser.JazShopPFGOrders"
-        permission="jazkarta.shop.ManageShop"
+        permission="jazkarta.pfg.jazshop.AccessPfgOrders"
         />
 
     <utility
