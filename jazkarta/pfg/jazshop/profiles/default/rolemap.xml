@@ -17,5 +17,10 @@
       <role name="Manager" />
       <role name="Contributor" />
     </permission>
+    <permission name="jazkarta.pfg.jazshop: Access Pfg Orders" acquire="False">
+      <role name="Site Administrator" />
+      <role name="Manager" />
+      <role name="PFG Orders Accessor" />
+    </permission>
   </permissions>
 </rolemap>

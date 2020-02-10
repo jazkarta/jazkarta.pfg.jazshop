@@ -48,14 +48,6 @@
       import_steps="rolemap"
       />
 
-    <permission
-        id="jazkarta.pfg.jazshop.AccessPfgOrders"
-        title="jazkarta.pfg.jazshop: Access Pfg Orders">
-      <role name="Site Administrator" />
-      <role name="Manager" />
-      <role name="PFG Orders Accessor" />
-    </permission>
-
     <class class=".fields.JazShopSelectStringField">
         <require
             permission="zope2.View"
@@ -90,6 +82,10 @@
         class=".browser.JazShopPFGCallback"
         permission="zope2.View"
         />
+
+    <permission title="jazkarta.pfg.jazshop: Access Pfg Orders"
+                id="jazkarta.pfg.jazshop.AccessPfgOrders">
+    </permission>
 
     <browser:page
         name="jazshop-pfg-orders"
