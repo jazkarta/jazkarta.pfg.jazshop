@@ -8,6 +8,9 @@
 
 <body>
 
+<metal:override fill-slot="top_slot"
+    tal:define="disable_column_two python:request.set('disable_plone.rightcolumn',1);"/>
+
 <metal:main fill-slot="content-core">
   <div>
     <h1 class="documentFirstHeading">Export Orders - <tal:title replace="context/aq_parent/Title|context/Title|nothing" /></h1>
