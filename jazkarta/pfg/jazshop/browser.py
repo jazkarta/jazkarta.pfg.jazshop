@@ -144,6 +144,9 @@ class JazShopPFGOrders(BrowserView, DateMixin):
                     'bill_email': bill.get('email'),
                     'items': order.get('items'),
                 }
+                for k, v in list(ldict.items()):
+                    if isinstance(v, unicode):
+                        ldict[k] = v.encode('utf-8')
                 ldict.update(order['pfg_forms'][form_uid])
                 writer.writerow(ldict)
 
